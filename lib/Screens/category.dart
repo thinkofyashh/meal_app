@@ -6,8 +6,7 @@ import 'package:meal_app/models/items.dart';
 import 'package:meal_app/models/meals.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({Key? key,required this.ontoggle,required this.availableMeal}) : super(key: key);
-  final void Function(Meal meal) ontoggle;
+  const Categories({Key? key,required this.availableMeal}) : super(key: key);
   final List<Meal> availableMeal;
 
   void _selectCategory(BuildContext context,Items items) {
@@ -17,7 +16,6 @@ class Categories extends StatelessWidget {
         builder: (ctx) => MealsScreen(
               meals:filteredList,
               title:items.title,
-          ontogglefav: ontoggle,
             )));
     // Navigation.push(context,route);
   }
