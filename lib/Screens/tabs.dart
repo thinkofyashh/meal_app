@@ -27,25 +27,22 @@ class TabScreen extends ConsumerStatefulWidget {
 class _TabScreenState extends ConsumerState<TabScreen> {
   // when riverpod is added we canget rid of this code.
   //final List<Meal> favmeal = [];
- // Map<Filter, bool> selectedfilter =kinitialfilter;
+  // Map<Filter, bool> selectedfilter =kinitialfilter;
 
   void onselect(String identifiers) async {
     Navigator.of(context).pop();
     if (identifiers == "Filters") {
       // because we have now a provider to manage the filter state.
-    //  final result = await Navigator.of(context).push<Map<Filter, bool>>(
-          MaterialPageRoute(builder: (ctx) => const FilterScreen());
-     // print(result);
-     // setState(() {
-       // selectedfilter = result
-        //?? kinitialfilter;
-      //});
+      await Navigator.of(context).push<Map<Filter, bool>>(MaterialPageRoute(
+        builder: (ctx) => FilterScreen(),
+      ));
     }
   }
+
 // now we will also move this method to the mealdetail screen.
   //void showinMessage(String msg) {
-    //ScaffoldMessenger.of(context).clearSnackBars();
-    //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  //ScaffoldMessenger.of(context).clearSnackBars();
+  //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   //}
 
   // this function add a meal into favmeal if the meal is not there in the favmeal list.
@@ -76,29 +73,15 @@ class _TabScreenState extends ConsumerState<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
-   final meals= ref.watch(mealprovider);
-   final activefilters=ref.watch(filterProvider);
-    final availablemeals=meals.where((meal){
-      if(activefilters[Filter.glutenfree]! && !meal.isGlutenFree){
-        return false;
-      }
-      if(activefilters[Filter.lactosefree]! && !meal.isLactoseFree){
-        return false;
-      }
-      if(activefilters[Filter.vegen]! && !meal.isVegan){
-        return false;
-      }
-      if(activefilters[Filter.vegetarian]! && !meal.isVegetarian){
-        return false;
-      }
-      return true;
-    }).toList();
+    final meals = ref.watch(mealprovider);
+    final activefilters = ref.watch(filterProvider);
+    final availablemeals =ref.watch(filtermealProvider);
     Widget activepage = Categories(
-      availableMeal:availablemeals,
+      availableMeal: availablemeals,
     );
     var activepagetitle = 'Pick Your Category';
     if (_selectedpageindex == 1) {
-      final favmealproviders=ref.watch(favmealprovider);
+      final favmealproviders = ref.watch(favmealprovider);
       activepage = MealsScreen(
         meals: favmealproviders,
       );

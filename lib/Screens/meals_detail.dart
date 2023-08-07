@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meal_app/Provider/filter_provider.dart';
 import 'package:meal_app/models/meals.dart';
 import 'package:meal_app/Provider/favourite_Provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,8 @@ class MealDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favmeal = ref.watch(filtermealProvider);
+    final isfav = favmeal.contains(meal);
     return Scaffold(
         appBar: AppBar(
           title: Text(meal.title),
@@ -27,7 +30,7 @@ class MealDetailScreen extends ConsumerWidget {
                           ? "Meal is Added to the favourites"
                           : "Meal is removed from the favourites")));
                 },
-                icon: Icon(Icons.star)),
+                icon: Icon(isfav ? Icons.star : Icons.star_border)),
           ],
         ),
         body: SingleChildScrollView(
