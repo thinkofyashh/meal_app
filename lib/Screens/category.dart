@@ -5,34 +5,74 @@ import 'package:meal_app/Widgets/category_grid_items.dart';
 import 'package:meal_app/models/items.dart';
 import 'package:meal_app/models/meals.dart';
 
-class Categories extends StatelessWidget {
-  const Categories({Key? key,required this.availableMeal}) : super(key: key);
+class Categories extends StatefulWidget {
+  const Categories({Key? key, required this.availableMeal}) : super(key: key);
   final List<Meal> availableMeal;
 
-  void _selectCategory(BuildContext context,Items items) {
-    final filteredList=availableMeal.where((meal)=>meal.categories.contains(items.id)).toList();
+  @override
+  State<Categories> createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animationController = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 300),
+        lowerBound: 0,
+        upperBound: 1);
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    animationController.dispose();
+  }
+
+  void _selectCategory(BuildContext context, Items items) {
+    final filteredList = widget.availableMeal
+        .where((meal) => meal.categories.contains(items.id))
+        .toList();
 
     Navigator.of(context).push(MaterialPageRoute(
         builder: (ctx) => MealsScreen(
-              meals:filteredList,
-              title:items.title,
+              meals: filteredList,
+              title: items.title,
             )));
     // Navigation.push(context,route);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
-        padding: const EdgeInsets.all(24),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20),
-        children: [
-          for (final items in availableCategories)
-            CategoryGridItems(items: items,onSelect: (){_selectCategory(context,items);},)
-        ],
-    );
+    return AnimatedBuilder(
+        animation: animationController,
+        child: GridView(
+          padding: const EdgeInsets.all(24),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 3 / 2,
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 20),
+          children: [
+            for (final items in availableCategories)
+              CategoryGridItems(
+                items: items,
+                onSelect: () {
+                  _selectCategory(context, items);
+                },
+              )
+          ],
+        ),
+        builder: (context, child) => Padding(
+              padding: EdgeInsets.only(top: 100-animationController.value * 100),
+              child: child,
+            ));
   }
 }
