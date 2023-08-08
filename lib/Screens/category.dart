@@ -74,10 +74,11 @@ class _CategoriesState extends State<Categories>
             // padding: EdgeInsets.only(top: 100-animationController.value * 100),
             //child: child,)
             SlideTransition(
-              position: animationController.drive(Tween(
+              position: Tween(
                       begin: const Offset(0.0, 0.3),
                       end: const Offset(0.0, 0.0))
-                  ),
+                  .animate(CurvedAnimation(
+                      parent: animationController, curve: Curves.easeInOut)),
               child: child,
             ));
   }
