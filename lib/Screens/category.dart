@@ -70,8 +70,14 @@ class _CategoriesState extends State<Categories>
               )
           ],
         ),
-        builder: (context, child) => Padding(
-              padding: EdgeInsets.only(top: 100-animationController.value * 100),
+        builder: (context, child) => //Padding(
+            // padding: EdgeInsets.only(top: 100-animationController.value * 100),
+            //child: child,)
+            SlideTransition(
+              position: animationController.drive(Tween(
+                      begin: const Offset(0.0, 0.3),
+                      end: const Offset(0.0, 0.0))
+                  ),
               child: child,
             ));
   }
